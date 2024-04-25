@@ -1,42 +1,89 @@
+# Report
 
-# Rapport
+1. Created a mountain class
+2. Added RecyclerView to the layout
+3. Tested how demarshalling of JSON objects work, it worked well
+4. Added anonymous implementation of RecyclerView.Adapter and Viewholder
+5. Made it possible to display the mountain names
+6. final layout configurations and source code cleanup
 
-**Skriv din rapport här!**
+## Code 
 
-_Du kan ta bort all text som finns sedan tidigare_.
+### Member Variables
 
-## Följande grundsyn gäller dugga-svar:
+```java
+  private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
+  private RecyclerView.Adapter myAdapter = new RecyclerView.Adapter() { ... }
+```
 
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
+### Adapter Implementation
 
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
+```java
+private RecyclerView.Adapter myAdapter = new RecyclerView.Adapter() {
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView myTextView;
+        public ViewHolder(View view) {
+            super(view);
+            myTextView = itemView.findViewById(R.id.text_view_item);
+        }
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_view_item, viewGroup, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        ViewHolder holder = (ViewHolder) viewHolder;
+        holder.myTextView.setText(mountainArrayList.get(i).toString());
+    }
+
+    @Override
+    public int getItemCount() {
+        return mountainArrayList.size();
+    }
+};
 
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
-    }
+
+### Mountain class
+
+```java
+public class Mountain {
+
+    private String ID;
+    private String name;
+    private String type;
+    private String location;
+    private int size;
+    private int cost;
 }
 ```
 
-Bilder läggs i samma mapp som markdown-filen.
+### Famous Peaks
 
-![](android.png)
+```java
 
-Läs gärna:
+@Override
+public void onPostExecute(String json) {
 
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
+    Gson gson = new Gson();
+    Type type = new TypeToken<ArrayList<Mountain>>() {}.getType();
+    mountainArrayList = gson.fromJson(json, type);
+    Log.d("MainActivity", json);
+    RecyclerView recyclerView = findViewById(R.id.my_recycler_view);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    recyclerView.setAdapter(myAdapter);
+
+}
+
+```
+
+## IMG
+
+![](capture.png)
+
