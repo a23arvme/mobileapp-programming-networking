@@ -7,8 +7,9 @@ public class Mountain {
     private String ID;
     private String name;
     private String type;
-    private String cost;
-    private int meter;
+    private String location;
+    private int size;
+    private int cost;
 
     @NonNull
     @Override
