@@ -12,8 +12,10 @@
 ### Member Variables
 
 ```java
-  private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
-  private RecyclerView.Adapter myAdapter = new RecyclerView.Adapter() { ... }
+private final String JSON_URL = "https://mobprog.webug.se/json-api?login=brom";
+private final String JSON_FILE = "mountains.json";
+private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
+private RecyclerView.Adapter myAdapter = new RecyclerView.Adapter() { ... }
 ```
 
 ### Adapter Implementation

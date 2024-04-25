@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
 
-    private final String JSON_URL = "HTTPS_URL_TO_JSON_DATA_CHANGE_THIS_URL";
+    private final String JSON_URL = "https://mobprog.webug.se/json-api?login=brom";
     private final String JSON_FILE = "mountains.json";
 
     private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new JsonTask(this).execute("https://mobprog.webug.se/json-api?login=brom");
+        new JsonTask(this).execute(JSON_URL);
 
         new JsonFile(this, this).execute(JSON_FILE);
     }
