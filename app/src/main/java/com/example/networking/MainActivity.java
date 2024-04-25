@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -53,12 +54,13 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
             @Override
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
+                ViewHolder holder = (ViewHolder) viewHolder;
+                holder.myTextView.setText(mountainArrayList.get(i).toString());
             }
 
             @Override
             public int getItemCount() {
-                return 0;
+                return mountainArrayList.size();
             }
         };
     }
@@ -66,10 +68,15 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     @Override
     public void onPostExecute(String json) {
 
+
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Mountain>>() {}.getType();
         mountainArrayList = gson.fromJson(json, type);
         Log.d("MainActivity", json);
+        RecyclerView recyclerView = findViewById(R.id.my_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(myAdapter);
+
     }
 
 }

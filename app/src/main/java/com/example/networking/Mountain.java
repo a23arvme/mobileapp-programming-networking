@@ -17,6 +17,6 @@ public class Mountain {
     @NonNull
     @Override
     public String toString() {
-        return ID + name + type + cost + meter;
+        return name;
     }
 }
