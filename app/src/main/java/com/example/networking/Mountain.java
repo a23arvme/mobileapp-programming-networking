@@ -1,16 +1,22 @@
 package com.example.networking;
 
+import androidx.annotation.NonNull;
+
 public class Mountain {
 
+    private String ID;
     private String name;
     private String type;
-    private String location;
-    private int metersAboveSeaLevel;
+    private String cost;
+    private int meter;
 
-    public Mountain(String name, String type, String location, int height){
-        this.name = name;
-        this.type = type;
-        this.location = location;
-        metersAboveSeaLevel = height;
+    public Mountain(){
+
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ID + name + type + cost + meter;
     }
 }
