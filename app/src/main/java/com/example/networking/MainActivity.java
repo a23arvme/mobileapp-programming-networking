@@ -24,7 +24,34 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     private final String JSON_FILE = "mountains.json";
 
     private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
-    private RecyclerView.Adapter myAdapter;
+    private RecyclerView.Adapter myAdapter = new RecyclerView.Adapter() {
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView myTextView;
+            public ViewHolder(View view) {
+                super(view);
+                myTextView = itemView.findViewById(R.id.text_view_item);
+            }
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_view_item, viewGroup, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+            ViewHolder holder = (ViewHolder) viewHolder;
+            holder.myTextView.setText(mountainArrayList.get(i).toString());
+        }
+
+        @Override
+        public int getItemCount() {
+            return mountainArrayList.size();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,40 +61,10 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         new JsonTask(this).execute("https://mobprog.webug.se/json-api?login=brom");
 
         new JsonFile(this, this).execute(JSON_FILE);
-
-         myAdapter = new RecyclerView.Adapter() {
-
-             class ViewHolder extends RecyclerView.ViewHolder {
-                 TextView myTextView;
-                 public ViewHolder(View view) {
-                     super(view);
-                     myTextView = itemView.findViewById(R.id.text_view_item);
-                 }
-             }
-
-             @NonNull
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_view_item, viewGroup, false);
-                return new ViewHolder(view);
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                ViewHolder holder = (ViewHolder) viewHolder;
-                holder.myTextView.setText(mountainArrayList.get(i).toString());
-            }
-
-            @Override
-            public int getItemCount() {
-                return mountainArrayList.size();
-            }
-        };
     }
 
     @Override
     public void onPostExecute(String json) {
-
 
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Mountain>>() {}.getType();

@@ -10,10 +10,6 @@ public class Mountain {
     private String cost;
     private int meter;
 
-    public Mountain(){
-
-    }
-
     @NonNull
     @Override
     public String toString() {
