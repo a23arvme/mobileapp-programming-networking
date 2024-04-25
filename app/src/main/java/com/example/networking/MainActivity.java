@@ -2,8 +2,14 @@ package com.example.networking;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     private final String JSON_FILE = "mountains.json";
 
     private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
+    private RecyclerView.Adapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,34 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         new JsonTask(this).execute("https://mobprog.webug.se/json-api?login=brom");
 
         new JsonFile(this, this).execute(JSON_FILE);
+
+         myAdapter = new RecyclerView.Adapter() {
+
+             class ViewHolder extends RecyclerView.ViewHolder {
+                 TextView myTextView;
+                 public ViewHolder(View view) {
+                     super(view);
+                     myTextView = itemView.findViewById(R.id.text_view_item);
+                 }
+             }
+
+             @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_view_item, viewGroup, false);
+                return new ViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        };
     }
 
     @Override
@@ -34,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Mountain>>() {}.getType();
         mountainArrayList = gson.fromJson(json, type);
-        Log.d("dog", mountainArrayList.get(0).toString());
         Log.d("MainActivity", json);
     }
 
